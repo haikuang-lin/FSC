@@ -1,0 +1,5 @@
+{
+  "aerospace_space": ["RKLB", "ASTS", "LUNR", "RDW", "PL", "BKSY", "KTOS", "AVAV", "RTX", "LMT", "NOC", "BA", "GE"],
+  "ai": ["NVDA", "MSFT", "GOOGL", "META", "AMD", "AVGO", "PLTR", "ARM", "TSM", "SMCI"],
+  "sports": ["NKE", "LULU", "ONON", "DECK", "UAA", "CROX", "YETI", "SKX", "DKS", "FL"]
+}

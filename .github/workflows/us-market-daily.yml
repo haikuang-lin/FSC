@@ -1,0 +1,40 @@
+name: US market daily report
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 23:20 UTC = 19:20 EDT / 18:20 EST; safely after the US cash close.
+    - cron: "20 23 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Generate and deliver report
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-4o-mini' }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python market_agent.py
+      - name: Commit report history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git diff --cached --quiet || git commit -m "chore: add daily US market report"
+          git push
+      - uses: actions/upload-artifact@v4
+        with:
+          name: us-market-report
+          path: reports/*.md
+          if-no-files-found: error
