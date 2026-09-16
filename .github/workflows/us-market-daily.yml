@@ -2,9 +2,6 @@ name: US market daily report
 
 on:
   workflow_dispatch:
-  schedule:
-    # 23:20 UTC = 19:20 EDT / 18:20 EST; safely after the US cash close.
-    - cron: "20 23 * * 1-5"
 
 permissions:
   contents: write
